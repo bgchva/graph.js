@@ -21,38 +21,37 @@ To do Algorithms
 * DAG shortest path
 * Connected Components
 
-How to contribute
------------------
-* Fork the repo and implement the algorithms in to do list.
-* If you find any bug just open an issue.
-* You can always contact me at @devenbhooshan on twitter. 
 
 How to use
 ----------
-* Build the library by typing `make` from the root directory of graph.js. 
-* A file named **graph.js** would be created in the folder **build/** 
-* Done (ya!!!)
 * Sample code can be found in **test** folder
+
+TODO: add typescript compilation on npm prepare script, so it can be used in javascript project
 
 Initialization
 --------------
 
-    graph =new Graph(); // creates a graph
-    node1=graph.AddNode("India"); // creates a node
-    node2=graph.AddNode("Delhi"); // creates a node
-    node1.addEdge(node2);         // Adds an edge between node1 & node2
-    console.log(node1.adjList);   // returns all neighbouring nodes of nod1
-    console.log(node2.adjList);   // returns all neighbouring nodes of nod2
-    console.log(graph.nodes.length); // returns number of nodes in graph
+    const graph = new Graph<string>();    // creates a graph
+    const node1 = graph.addNode("India"); // creates a node
+    const node2 = graph.addNode("Delhi"); // creates a node
+    node1.addEdge(node2);                 // Adds an edge between node1 & node2
+    console.log(node1.getEdges());        // returns all neighbouring nodes of nod1
+    console.log(node2.getEdges());        // returns all neighbouring nodes of nod2
+    console.log(graph.getAllNodes().length); // returns number of nodes in graph
     
 Traversal
 ---------
 
-    var bfsTraversedNodes=bfs(graph); // returns a bfs traversal of graph
-    var dfsTraversedNodes=dfs(graph); // returns a dfs traversal of graph
+    const bfsTraversedNodes = Bfs(graph).get(); // returns a bfs traversal of graph
+    const dfsTraversedNodes = Dfs(graph).get(); // returns a dfs traversal of graph
     
-Shortest Distance beween two nodes
+Shortest Distance between two nodes
 ------------------------------
 
-    dijkstra(graph,sourceNode,destinationNode); // returns shortest distance between source and destination nodes
-    bellman_ford(graph,node1,node6); // This function returns null if there exist negative cycle in the graph otherwise it gives the shortest distance between node1 and node6
+    const matrix = new Dijkstra(graph, sourceNode).matrix;  //create matrix
+    matrix.getDistance(destinationNode); // returns shortest distance between source and destination nodes
+    matrix.getPath(destinationNode);     // returns shortest path between source and destination nodes
+
+    const matrix = BellmanFord(graph, node1).matrix; // This function returns null if there exist negative cycle in the graph otherwise it gives the shortest distance between nodes
+    matrix.getDistance(node6); // returns shortest distance between source and destination nodes
+    matrix.getPath(node6);     // returns shortest path between source and destination nodes

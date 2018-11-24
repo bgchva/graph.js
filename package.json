@@ -1,0 +1,35 @@
+{
+  "name": "graphjs",
+  "version": "1.0.0",
+  "description": "A liteweight javascript graph algorithms library.",
+  "main": "index.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jasmine-ts \"test/**/*.spec.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgchva/graph.js.git"
+  },
+  "keywords": [
+    "typescript",
+    "graph"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bgchva/graph.js/issues"
+  },
+  "homepage": "https://github.com/bgchva/graph.js#readme",
+  "devDependencies": {
+    "@types/jasmine": "3.3.0",
+    "jasmine": "3.3.0",
+    "jasmine-ts": "0.2.0",
+    "typescript": "3.1.6"
+  },
+  "dependencies": {
+    "uuid": "3.3.2"
+  }
+}
