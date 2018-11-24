@@ -26,8 +26,6 @@ How to use
 ----------
 * Sample code can be found in **test** folder
 
-TODO: add typescript compilation on npm prepare script, so it can be used in javascript project
-
 Initialization
 --------------
 

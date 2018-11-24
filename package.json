@@ -2,12 +2,13 @@
   "name": "graphjs",
   "version": "1.0.0",
   "description": "A liteweight javascript graph algorithms library.",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "jasmine-ts \"test/**/*.spec.ts\""
+    "test": "jasmine-ts \"test/**/*.spec.ts\"",
+    "prepare": "node_modules/typescript/bin/tsc"
   },
   "repository": {
     "type": "git",
