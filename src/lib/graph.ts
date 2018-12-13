@@ -40,9 +40,9 @@ export class Graph<T> {
 }
 
 export interface Edge<T> {
-    nodeFrom: Node<T>;
+    nodeFrom?: Node<T>;
     nodeTo: Node<T>;
-    weight: number;
+    weight?: number;
 }
 
 export class Node<T> {
@@ -56,12 +56,22 @@ export class Node<T> {
         this.edges = [];
     }
 
-    addEdge(neighbour: Node<T>, weight: number = 1): Edge<T> {
+    addEdge(nodeTo: Node<T>, weight?: number): Edge<T>
+    addEdge(edge: Edge<T>): Edge<T>
+    addEdge(nodeToOrEdge: Edge<T> | Node<T>, weight?: number): Edge<T> {
         const edge: Edge<T> = {
-            nodeFrom: <Node<T>>this,
-            nodeTo: neighbour,
-            weight: weight
+            nodeTo: null,
+            nodeFrom: this,
+            weight: 1
         };
+        if(nodeToOrEdge instanceof Node) {
+            edge.nodeTo = nodeToOrEdge;
+            if(weight !== undefined)
+                edge.weight = weight;
+        }
+        else
+            Object.assign(edge, nodeToOrEdge);
+
         this.edges.push(edge);
         return edge;
     }

@@ -1,5 +1,6 @@
-import {BellmanFord, Dijkstra, PathMatrix, Johnson} from '../src/algorithms/shortestPath';
-import {Graph, Node, Edge} from '../src/lib/graph';
+import {Algorithm, ShortestPath, ShortestPathAlgorithm, ShortestPathAlgorithmFactory} from '../src';
+import {Graph, Node, Edge} from '../src';
+import {PathMatrix} from '../src/algorithms/path/pathMatrix';
 
 describe('shortest path', () => {
     const graph = new Graph<number>();
@@ -10,48 +11,59 @@ describe('shortest path', () => {
     const edge1_3 = node1.addEdge(node3, 5);
     const edge2_3 = node2.addEdge(node3, 3);
 
-    function checkPathAndDistance<T>(matrix: PathMatrix<T>, node: Node<T>,
+    function checkPathAndDistance<T>(shortestPath: ShortestPath<T>,
+                                     source: Node<T>,
+                                     target: Node<T>,
                                      expectedDistance: number,
                                      expectedPath: Edge<T>[]) {
-
-        const actualDistance = matrix.getDistance(node);
+        const actualDistance = shortestPath.getPathLength(source, target);
         expect(actualDistance).toEqual(expectedDistance);
 
-        const actualPath = matrix.getPath(node);
+        const actualPath = shortestPath.getPath(source, target);
         expect(actualPath).toEqual(expectedPath);
     }
 
     describe('Dijkstra', () => {
+        let alg: ShortestPathAlgorithm<number>;
+        beforeAll(() => {
+            alg = ShortestPathAlgorithmFactory.get<number>(Algorithm.Dijkstra);
+        });
+
         it('should calculate shortest path from node1 to node2', () => {
-            const d = new Dijkstra(graph, node1);
-            checkPathAndDistance(d.matrix, node2, 1, [edge1_2]);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node2, 1, [edge1_2]);
         });
 
         it('should calculate shortest path from node1 to node3', () => {
-            const d = new Dijkstra(graph, node1);
-            checkPathAndDistance(d.matrix, node3, 4, [edge1_2, edge2_3]);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node3, 4, [edge1_2, edge2_3]);
         });
 
         it('shouldn\'t find path from node3 to node1', () => {
-            const d = new Dijkstra(graph, node3);
-            checkPathAndDistance(d.matrix, node1, PathMatrix.Infinity, []);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node3, node1, PathMatrix.Infinity, []);
         });
     });
 
     describe('BellmanFord', () => {
+        let alg: ShortestPathAlgorithm<number>;
+        beforeAll(() => {
+            alg = ShortestPathAlgorithmFactory.get<number>(Algorithm.BellmanFord);
+        });
+
         it('should calculate shortest path from node1 to node2', () => {
-            const d = new BellmanFord(graph, node1);
-            checkPathAndDistance(d.matrix, node2, 1, [edge1_2]);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node2, 1, [edge1_2]);
         });
 
         it('should calculate shortest path from node1 to node3', () => {
-            const d = new BellmanFord(graph, node1);
-            checkPathAndDistance(d.matrix, node3, 4, [edge1_2, edge2_3]);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node3, 4, [edge1_2, edge2_3]);
         });
 
         it('shouldn\'t find path from node3 to node1', () => {
-            const d = new BellmanFord(graph, node3);
-            checkPathAndDistance(d.matrix, node1, PathMatrix.Infinity, []);
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node3, node1, PathMatrix.Infinity, []);
         });
 
         describe('negative edges', () => {
@@ -83,38 +95,63 @@ describe('shortest path', () => {
             it('shouldn\'t find path if nodes are not connected', () => {
                 const node6 = graph.getNode(6);
                 const node10 = graph.getNode(10);
-                const matrix = new BellmanFord(graph, node6).matrix;
-                expect(matrix.getDistance(node10)).toEqual(PathMatrix.Infinity);
+
+                const shortestPath = new ShortestPath(graph, alg);
+                const actualPathLength = shortestPath.getPathLength(node6, node10);
+                expect(actualPathLength).toEqual(PathMatrix.Infinity);
             });
 
             it('should find negative distance', () => {
                 const node1 = graph.getNode(1);
                 const node9 = graph.getNode(9);
-                const matrix = new BellmanFord(graph, node1).matrix;
-                expect(matrix.getDistance(node9)).toEqual(-1);
+
+                const shortestPath = new ShortestPath(graph, alg);
+                const actualPathLength = shortestPath.getPathLength(node1, node9);
+                expect(actualPathLength).toEqual(-1);
             });
 
             it('should find negative distance', () => {
                 const node1 = graph.getNode(1);
                 const node6 = graph.getNode(6);
-                const matrix = new BellmanFord(graph, node1).matrix;
-                expect(matrix.getDistance(node6)).toEqual(-4);
+
+                const shortestPath = new ShortestPath(graph, alg);
+                const actualPathLength = shortestPath.getPathLength(node1, node6);
+                expect(actualPathLength).toEqual(-4);
             });
 
             it('should detect cycle', () => {
                 const node1 = graph.getNode(1);
                 const node6 = graph.getNode(6);
                 node6.addEdge(node1, -1);
-                const getMatrix = () => new BellmanFord(graph, node1).matrix;
-                expect(getMatrix).toThrowError();
+
+                const shortestPath = new ShortestPath(graph, alg);
+                const getActualPathLength = () => shortestPath.getPathLength(node1, node6);
+                expect(getActualPathLength).toThrowError();
             })
         });
     });
 
-    xdescribe('Johnson', () => {
-        //TODO: Johnson algorithm test
-        it('', () => {
-            const t = new Johnson(graph).matrix;
+    describe('Johnson', () => {
+        let alg: ShortestPathAlgorithm<number>;
+        beforeAll(() => {
+            alg = ShortestPathAlgorithmFactory.get<number>(Algorithm.Johnson);
         });
+
+        it('should calculate shortest path from node1 to node2', () => {
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node2, 1, [edge1_2]);
+        });
+
+        it('should calculate shortest path from node1 to node3', () => {
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node3, 4, [edge1_2, edge2_3]);
+        });
+
+        it('shouldn\'t find path from node3 to node1', () => {
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node3, node1, PathMatrix.Infinity, []);
+        });
+
+        //TODO: test with negative edges
     })
 });
