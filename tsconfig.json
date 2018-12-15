@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es6",
-    "module2": "commonjs",
+    "module": "commonjs",
     "outDir": "dist"
   },
   "exclude": [
