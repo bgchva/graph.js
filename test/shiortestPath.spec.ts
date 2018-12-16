@@ -43,6 +43,30 @@ describe('shortest path', () => {
             const shortestPath = new ShortestPath(graph, alg);
             checkPathAndDistance(shortestPath, node3, node1, PathMatrix.Infinity, []);
         });
+
+
+        it('should find path and doesn\'t depend on the node adding order', () => {
+            const graph = new Graph<number>();
+            const node1 = graph.addNode(1);
+            const node7 = graph.addNode(7);
+            const node8 = graph.addNode(8);
+            const node4 = graph.addNode(4);
+            const node2 = graph.addNode(2);
+            const node3 = graph.addNode(3);
+            const node5 = graph.addNode(5);
+            const node6 = graph.addNode(6);
+
+            const edge1_2 = node1.addEdge(node2, 1);
+            const edge2_3 = node2.addEdge(node3, 0);
+            const edge3_4 = node3.addEdge(node4, 0);
+
+            const edge4_5 = node4.addEdge(node5, 1);
+            const edge5_6 = node5.addEdge(node6, 0);
+            const edge6_1 = node6.addEdge(node1, 0);
+
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node4, 1, [edge1_2, edge2_3, edge3_4]);
+        })
     });
 
     describe('BellmanFord', () => {
@@ -64,6 +88,29 @@ describe('shortest path', () => {
         it('shouldn\'t find path from node3 to node1', () => {
             const shortestPath = new ShortestPath(graph, alg);
             checkPathAndDistance(shortestPath, node3, node1, PathMatrix.Infinity, []);
+        });
+
+        it('should find path and doesn\'t depend on the node adding order', () => {
+            const graph = new Graph<number>();
+            const node1 = graph.addNode(1);
+            const node7 = graph.addNode(7);
+            const node8 = graph.addNode(8);
+            const node4 = graph.addNode(4);
+            const node2 = graph.addNode(2);
+            const node3 = graph.addNode(3);
+            const node5 = graph.addNode(5);
+            const node6 = graph.addNode(6);
+
+            const edge1_2 = node1.addEdge(node2, 1);
+            const edge2_3 = node2.addEdge(node3, 0);
+            const edge3_4 = node3.addEdge(node4, 0);
+
+            const edge4_5 = node4.addEdge(node5, 1);
+            const edge5_6 = node5.addEdge(node6, 0);
+            const edge6_1 = node6.addEdge(node1, 0);
+
+            const shortestPath = new ShortestPath(graph, alg);
+            checkPathAndDistance(shortestPath, node1, node4, 1, [edge1_2, edge2_3, edge3_4]);
         });
 
         describe('negative edges', () => {

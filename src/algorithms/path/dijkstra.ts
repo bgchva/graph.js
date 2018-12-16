@@ -19,8 +19,8 @@ export class DijkstraAlgorithm<T> implements ShortestPathAlgorithm<T> {
             node.getAllEdges().forEach(edge => {
                 const dist = matrix.updatePath(edge);
                 if(dist != null) {
-                    priorityQueue.remove(node);
-                    priorityQueue.push(node, dist);
+                    priorityQueue.remove(edge.nodeTo);
+                    priorityQueue.push(edge.nodeTo, dist);
                 }
             });
         }
